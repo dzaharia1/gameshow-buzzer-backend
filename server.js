@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 
 let players = [];
-let buzzOrder = [];
+let buzzOrder = []; // Now: [{ name, time }]
 
 function broadcast(data) {
   const msg = JSON.stringify(data);
@@ -46,8 +46,8 @@ wss.on('connection', (ws) => {
     }
 
     if (data.type === 'buzz') {
-      if (!buzzOrder.includes(data.name)) {
-        buzzOrder.push(data.name);
+      if (!buzzOrder.find(entry => entry.name === data.name)) {
+        buzzOrder.push({ name: data.name, time: Date.now() });
         broadcast({ type: 'buzzOrder', buzzOrder });
       }
     }
@@ -60,7 +60,7 @@ wss.on('connection', (ws) => {
     if (data.type === 'changeName') {
       // Remove old name from players and buzzOrder
       players = players.filter(p => p.name !== data.oldName);
-      buzzOrder = buzzOrder.filter(n => n !== data.oldName);
+      buzzOrder = buzzOrder.filter(entry => entry.name !== data.oldName);
       // Add new name if not already present and newName is not empty
       if (data.newName && !players.find(p => p.name === data.newName)) {
         players.push({ name: data.newName });
