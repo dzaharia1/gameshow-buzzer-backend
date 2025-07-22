@@ -19,7 +19,7 @@ let buzzOrder = [];
 function broadcast(data) {
   const msg = JSON.stringify(data);
   wss.clients.forEach(client => {
-    if (client.readyState === WebgaSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN) {
       client.send(msg);
     }
   });
@@ -34,9 +34,12 @@ wss.on('connection', (ws) => {
       return;
     }
 
+    console.log(players);
+    console.log(buzzOrder);
+
     if (data.type === 'join') {
-      // Add player if not already present
-      if (!players.find(p => p.name === data.name)) {
+      // Add player if not already present and name is not empty
+      if (data.name && !players.find(p => p.name === data.name)) {
         players.push({ name: data.name });
       }
       broadcast({ type: 'players', players, buzzOrder });
@@ -52,6 +55,22 @@ wss.on('connection', (ws) => {
     if (data.type === 'reset') {
       buzzOrder = [];
       broadcast({ type: 'buzzOrder', buzzOrder });
+    }
+
+    if (data.type === 'changeName') {
+      // Remove old name from players and buzzOrder
+      players = players.filter(p => p.name !== data.oldName);
+      buzzOrder = buzzOrder.filter(n => n !== data.oldName);
+      // Add new name if not already present and newName is not empty
+      if (data.newName && !players.find(p => p.name === data.newName)) {
+        players.push({ name: data.newName });
+      }
+      broadcast({ type: 'players', players, buzzOrder });
+      broadcast({ type: 'buzzOrder', buzzOrder });
+    }
+
+    if (data.type === 'getState') {
+      ws.send(JSON.stringify({ type: 'players', players, buzzOrder }));
     }
   });
 
