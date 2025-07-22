@@ -57,6 +57,13 @@ wss.on('connection', (ws) => {
       broadcast({ type: 'buzzOrder', buzzOrder });
     }
 
+    if (data.type === 'hardReset') {
+      players = [];
+      buzzOrder = [];
+      broadcast({ type: 'hardReset' });
+      broadcast({ type: 'players', players, buzzOrder });
+    }
+
     if (data.type === 'changeName') {
       // Remove old name from players and buzzOrder
       players = players.filter(p => p.name !== data.oldName);
