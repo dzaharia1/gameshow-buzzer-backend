@@ -1,0 +1,9 @@
+{
+  "service_id": "buzzer-backend",
+  "service_name": "Buzzer Backend",
+  "domain": "https://buzzer-backend.danzaharia.com",
+  "host": "localhost",
+  "port": "3100",
+  "author": "dan",
+  "created_on": "Fri Jul 25 01:53:23 UTC 2025"
+}
