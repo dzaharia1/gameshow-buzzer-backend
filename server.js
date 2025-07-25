@@ -2,8 +2,7 @@ const http = require('http');
 const WebSocket = require('ws');
 require('dotenv').config();
 
-// HTTP server
-const httpServer = http.createServer((req, res) => {
+const server = http.createServer((req, res) => {
   if (req.url === '/status') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ status: 'ok' }));
@@ -13,8 +12,7 @@ const httpServer = http.createServer((req, res) => {
   res.end();
 });
 
-// WebSocket server on port 9090
-const wss = new WebSocket.Server({ port: 9090 });
+const wss = new WebSocket.Server({ server });
 
 let players = [];
 let buzzOrder = []; // structure will be: [{ name, time }]
@@ -89,9 +87,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-const HTTP_PORT = process.env.PORT || 3100;
-httpServer.listen(HTTP_PORT, () => {
-  console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
-});
-
-console.log('WebSocket server running on ws://localhost:9090'); 
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+  console.log(`HTTP/WebSocket server running on http://localhost:${PORT}`);
+}); 
