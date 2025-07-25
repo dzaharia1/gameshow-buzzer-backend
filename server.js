@@ -87,7 +87,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 9090;
 server.listen(PORT, () => {
   console.log(`HTTP/WebSocket server running on http://localhost:${PORT}`);
 }); 
