@@ -1,5 +1,6 @@
 const http = require('http');
 const WebSocket = require('ws');
+require('dotenv').config();
 
 const server = http.createServer((req, res) => {
   if (req.url === '/status') {
