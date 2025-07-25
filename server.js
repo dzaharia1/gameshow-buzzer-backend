@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 
 let players = [];
-let buzzOrder = []; // Now: [{ name, time }]
+let buzzOrder = []; // structure will be: [{ name, time }]
 
 function broadcast(data) {
   const msg = JSON.stringify(data);
