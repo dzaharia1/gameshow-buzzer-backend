@@ -1,5 +1,6 @@
 const http = require('http');
 const WebSocket = require('ws');
+const setupLog = require('./setup-log.json');
 require('dotenv').config();
 
 const server = http.createServer((req, res) => {
@@ -87,7 +88,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = setupLog.port || 8080;
 server.listen(PORT, () => {
   console.log(`HTTP/WebSocket server running on http://localhost:${PORT}`);
 }); 
